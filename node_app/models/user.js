@@ -1,6 +1,9 @@
+var validator = require('validator')
 var mongoose = require('mongoose');
+var bcrypt = require("bcrypt");
+const SALT_WORK_FACTOR = 10;
 
-User = mongoose.model('User', {
+var UserSchema = new mongoose.Schema({
     username: {
         type: String,
         lowercase: true,
@@ -14,7 +17,8 @@ User = mongoose.model('User', {
     password: {
         type: String,
         required: [true, "can't be blank"],
-        minlength: 3,
+        match: /(?=.*[a-zA-Z])(?=.*[0-9]+).*/,
+        minlength: 5,
         maxlength: 20
     },
 
@@ -24,8 +28,27 @@ User = mongoose.model('User', {
         minlength: 2,
         maxlength: 20
     },
-    age: { type: Number, required: [true, "can't be blank"], min: 5, max: 110 },
-    admin:  { type: Boolean, default:false}
+    email: { type: String, required: [true, "can't be blank"], validate: [validator.isEmail, 'Ingrese un correo valido'] },
+    admin: { type: Boolean, default: false }
+})
+
+UserSchema.pre('save', function (next) {
+    var user = this;
+    if (!user.isModified('password')) return next();
+
+    bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
+        if (err) return next(err);
+
+        bcrypt.hash(user.password, salt, function (err, hash) {
+            if (err) return next(err);
+
+            user.password = hash;
+            next();
+        });
+    });
 });
+
+
+User = mongoose.model('User', UserSchema);
 User.createIndexes();
 module.exports = User

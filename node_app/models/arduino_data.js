@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('ArduinoData', {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, "can't be blank"] },
     temperature: { type: Number, min:-273.15}, // Celsius
     humidity: { type: Number },
     geolocation: { // https://developers.google.com/maps/documentation/geolocation/intro
@@ -10,5 +11,6 @@ module.exports = mongoose.model('ArduinoData', {
         },
         accuracy: { type: Number, min: 0},
     }
+
 
 });

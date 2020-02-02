@@ -26,10 +26,10 @@ exports.ensureAuthenticatedAdmin = function (req, res, next) {
     if (token) {
         jwt.verify(token, config.secretKey, (err, decoded) => {
             if (err) {
-                return res.json({ mensaje: 'Token inválida' });            
-            } else if (!decoded.admin){
+                return res.json({ mensaje: 'Token inválida' });
+            } else if (!decoded.admin) {
                 return res.json({ mensaje: 'Debe ser administrador para acceder a este recurso' });
-            }else {
+            } else {
                 req.decoded = decoded;
                 next();
             }
@@ -39,4 +39,15 @@ exports.ensureAuthenticatedAdmin = function (req, res, next) {
             mensaje: 'Token no proveída.'
         });
     }
+}
+
+exports.ensureApiKey = function (req, res, next) {
+    const token = req.headers['api-key'];
+    if (token == config.apiKey) {
+        next();
+    } else {
+    res.send({
+        mensaje: 'API-KEY invalido'
+    });
+}
 }
