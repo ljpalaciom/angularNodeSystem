@@ -10,7 +10,6 @@ module.exports = mongoose.model('ArduinoData', {
             lng: { type: Number, min: -180, max: 180 },
         },
         accuracy: { type: Number, min: 0},
-    }
-
-
+    },
+    timestamp: {type: Date }
 });

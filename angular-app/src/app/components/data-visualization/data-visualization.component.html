@@ -1,0 +1,16 @@
+<div *ngIf="username">
+    Welcome {{username}}
+</div>
+<div *ngFor="let datum of data">
+
+    <h3>
+        {{ datum.timestamp }}
+    </h3>
+</div>
+
+<div *ngIf="chart">
+    <canvas id="canvas">
+        {{chart}}
+    </canvas>
+</div>
+<button (click)='authService.logout()'>Logout</button>

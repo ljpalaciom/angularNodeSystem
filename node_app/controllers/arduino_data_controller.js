@@ -4,7 +4,7 @@ exports.listArduinoData = function (req, res) {
 
 	ArduinoData.find({ user: req.decoded.sub }).populate("user", "username").exec(
 		function (err, listData) {
-			if (err) {
+			if (err) {	
 				return res.status(500).json({
 					status: 'error',
 					message: err.message
@@ -25,9 +25,15 @@ exports.setArduinoData = function (req, res) {
 					message: "Usuario desconocido",
 				})
 			}
-			
+			dataToAdd = { 
+				temperature: req.body.temperature, 
+				humidity: req.body.humidity, 
+				geolocation: req.body.geolocation, 
+				user: user, 
+				timestamp: Date.now() 
+			}
 			ArduinoData.create(
-				{ temperature: req.body.temperature, humidity: req.body.humidity, geolocation: req.body.geolocation, user: user },
+				dataToAdd,
 				function (err, data) {
 					if (err) {
 						return res.status(500).json({
