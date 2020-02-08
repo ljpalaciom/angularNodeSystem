@@ -1,38 +1,46 @@
-<div *ngIf="username">
-    Welcome {{username}}
-</div>
-<div class="row">
-    <div *ngIf="chartTemperature" class="col-md-6">
-        <canvas id="canvasTemperature">
-            {{chartTemperature}}
-        </canvas>
-    </div>
-    <div *ngIf="chartHumidities" class="col-md-6">
-        <canvas id="canvasHumidities">
-            {{chartHumidities}}
-        </canvas>
-    </div>
-</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Temperatura</th>
-            <th>Humedad</th>
-            <th>Latitud</th>
-            <th>Longitud</th>
-            <th>Precision de gps</th>
-        </tr>
-    </thead>
-    <tbody *ngIf="data">
-        <tr *ngFor="let datum of data">
-            <td scope="row">{{datum.temperature}}</td>
-            <td>{{datum.humidity}}</td>
-            <td>{{datum.geolocation.location.lat}}</td>
-            <td>{{datum.geolocation.location.lng}}</td>
-            <td>{{datum.geolocation.accuracy}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="container-fluid">
+    <div class="row my-3">
+        <div class="col-md-6 py-1">
+            <div class="card">
+                <div class="card-body"><canvas id="canvasTemperature">
+                        {{chartTemperature}}
+                    </canvas>
 
-<button (click)='getData()'>update</button>
-<button (click)='authService.logout()'>Logout</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 py-1">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="canvasHumidity">
+                        {{chartHumidity}}
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col text-center">
+        <button (click)='getData()' class="btn btn-info">Update data</button>
+    </div>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Temperatura</th>
+                <th>Humedad</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Precision de gps</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="data">
+            <tr *ngFor="let datum of data">
+                <td scope="row">{{datum.temperature}}</td>
+                <td>{{datum.humidity}}</td>
+                <td>{{datum.geolocation.location.lat}}</td>
+                <td>{{datum.geolocation.location.lng}}</td>
+                <td>{{datum.geolocation.accuracy}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

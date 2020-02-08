@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from './services/auth.service';
+import { DataSharingService } from './services/data-sharing.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title:string = 'angular-app';
+  constructor(private authService: AuthService, private dataSharingService: DataSharingService) { }
+  username: String;
+  ngOnInit() {
+    this.dataSharingService.changeNavBar.subscribe(change => {
+      this.username = this.authService.getUsername();;
+    });
+  }
+
+  ngOnDestroy(){
+    this.dataSharingService.changeNavBar.unsubscribe();
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { DataInterface } from '../models/data-interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,6 @@ export class DataService {
   });
   
   getData() {
-    const url_api = 'http://localhost:3000/api/data';
-    return this.http.get<DataInterface[]>(url_api, { headers: this.headers })
+    return this.http.get<DataInterface[]>(environment.url + '/data', { headers: this.headers })
   }
 }

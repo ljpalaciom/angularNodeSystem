@@ -3,15 +3,17 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
+import { DataSharingService } from './data-sharing.service';
+
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
 
-  url = 'http://localhost:3000/api';
   token: String;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private dataSharingService: DataSharingService) { }
   
   isAuthenticated(): boolean {
     let jwtHelper = new JwtHelperService();
@@ -20,13 +22,14 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    this.http.post(this.url + '/login', { username: username, password: password })
+    this.http.post(environment.url + '/login', { username: username, password: password })
       .subscribe((resp: any) => {
 
         this.router.navigate(['data']);
         
         localStorage.setItem('auth_token', resp.token);
         localStorage.setItem('username', username);
+        this.dataSharingService.changeNavBar.next(true);
       })
   }
 
@@ -34,6 +37,7 @@ export class AuthService {
     // const url_api = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('username');
+    this.dataSharingService.changeNavBar.next(true);
     this.router.navigate(['login'])
   }
  

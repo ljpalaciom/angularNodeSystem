@@ -19,7 +19,7 @@ export class DataVisualizationComponent implements OnInit {
   username: String;
   data: DataInterface[];
   chartTemperature = [];
-  chartHumidities = [];
+  chartHumidity = [];
   subscription: Subscription
 
   ngOnInit() {
@@ -27,7 +27,7 @@ export class DataVisualizationComponent implements OnInit {
     console.log(this.username);
     this.getData();
   }
-  
+
   getData() {
     this.dataService.getData().subscribe(
       res => {
@@ -44,11 +44,16 @@ export class DataVisualizationComponent implements OnInit {
         })
 
         let options = {
+          responsive: true,
           legend: {
-            display: false
+            display: true
           },
           scales: {
             xAxes: [{
+              scaleLabel:{
+                display: true,
+                labelString: "time"
+              },
               display: true
             }],
             yAxes: [{
@@ -56,18 +61,16 @@ export class DataVisualizationComponent implements OnInit {
             }]
           }
         }
-        console.log("rada")
-        this.chartTemperature = this.createLineChart('canvasTemperature', weatherDates, temperatures, options, 'RED');
-        this.chartHumidities = this.createLineChart('canvasHumidities', weatherDates, humidities, options, 'BLUE');
+        
+        this.chartTemperature = this.createLineChart('Temperature', weatherDates, temperatures, options, 'RED');
+        this.chartHumidity = this.createLineChart('Humidity', weatherDates, humidities, options, 'BLUE');
       },
       error => {
         console.log(error);
-        console.log("un error");
         this.router.navigate(['/login']);
       },
       () => { // when complete
         // this is called, ok!
-        console.log("meeeeeeeelo");
       }
     )
   }
@@ -77,15 +80,21 @@ export class DataVisualizationComponent implements OnInit {
     }
   }
   createLineChart(name: String, labels: any[], data: any[], options: {}, color: String) {
-    return new Chart(name, {
+    let nameChart = "canvas" + name;
+    options["scales"]["yAxes"][0]["scaleLabel"] = {
+      display: true,
+      labelString: name
+    }
+    return new Chart(nameChart, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [
           {
+            label: name,
             data: data,
             borderColor: color,
-            fill: true
+            fill: true,
           }
         ]
       },
