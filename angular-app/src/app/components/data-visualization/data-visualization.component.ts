@@ -5,6 +5,7 @@ import { DataService } from 'src/app/services/data.service';
 import { Chart } from 'chart.js'
 import { error } from 'protractor';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-data-visualization',
@@ -17,26 +18,24 @@ export class DataVisualizationComponent implements OnInit {
 
   username: String;
   data: DataInterface[];
-  chart = [];
+  chartTemperature = [];
+  chartHumidities = [];
+  subscription: Subscription
 
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
-  };
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
-  public barChartLegend = true;
-  public barChartData = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
-  ];
   ngOnInit() {
     this.username = this.authService.getUsername();
+    console.log(this.username);
+    this.getData();
+  }
+  
+  getData() {
     this.dataService.getData().subscribe(
-      data => {
-        this.data = data;
-        let temperature = this.data.map(data => data.temperature)
-        let alldates = this.data.map(data => data.timestamp)
+      res => {
+        console.log("holii");
+        this.data = res;
+        let temperatures = res.map(data => data.temperature);
+        let humidities = res.map(data => data.humidity);
+        let alldates = res.map(data => data.timestamp);
 
         let weatherDates = []
         alldates.forEach((date) => {
@@ -44,39 +43,54 @@ export class DataVisualizationComponent implements OnInit {
           weatherDates.push(jsdate.toLocaleTimeString('es', { year: 'numeric', month: 'short', day: 'numeric' }))
         })
 
-        this.chart = new Chart('canvas', {
-          type: 'line',
-          data: {
-            labels: weatherDates,
-            datasets: [
-              {
-                data: temperature,
-                borderColor: '#3cba9f',
-                fill: true
-              }
-            ]
+        let options = {
+          legend: {
+            display: false
           },
-          options: {
-            legend: {
-              display: false
-            },
-            scales: {
-              xAxes: [{
-                display: true
-              }],
-              yAxes: [{
-                display: true
-              }]
-            }
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              display: true
+            }]
           }
-        });
+        }
+        console.log("rada")
+        this.chartTemperature = this.createLineChart('canvasTemperature', weatherDates, temperatures, options, 'RED');
+        this.chartHumidities = this.createLineChart('canvasHumidities', weatherDates, humidities, options, 'BLUE');
       },
       error => {
         console.log(error);
-        this.router.navigate(['login']);
+        console.log("un error");
+        this.router.navigate(['/login']);
       },
-      
+      () => { // when complete
+        // this is called, ok!
+        console.log("meeeeeeeelo");
+      }
     )
+  }
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  createLineChart(name: String, labels: any[], data: any[], options: {}, color: String) {
+    return new Chart(name, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            borderColor: color,
+            fill: true
+          }
+        ]
+      },
+      options: options
+    });
   }
 }
 

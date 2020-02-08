@@ -1,16 +1,38 @@
 <div *ngIf="username">
     Welcome {{username}}
 </div>
-<div *ngFor="let datum of data">
-
-    <h3>
-        {{ datum.timestamp }}
-    </h3>
+<div class="row">
+    <div *ngIf="chartTemperature" class="col-md-6">
+        <canvas id="canvasTemperature">
+            {{chartTemperature}}
+        </canvas>
+    </div>
+    <div *ngIf="chartHumidities" class="col-md-6">
+        <canvas id="canvasHumidities">
+            {{chartHumidities}}
+        </canvas>
+    </div>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Temperatura</th>
+            <th>Humedad</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Precision de gps</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="data">
+        <tr *ngFor="let datum of data">
+            <td scope="row">{{datum.temperature}}</td>
+            <td>{{datum.humidity}}</td>
+            <td>{{datum.geolocation.location.lat}}</td>
+            <td>{{datum.geolocation.location.lng}}</td>
+            <td>{{datum.geolocation.accuracy}}</td>
+        </tr>
+    </tbody>
+</table>
 
-<div *ngIf="chart">
-    <canvas id="canvas">
-        {{chart}}
-    </canvas>
-</div>
+<button (click)='getData()'>update</button>
 <button (click)='authService.logout()'>Logout</button>

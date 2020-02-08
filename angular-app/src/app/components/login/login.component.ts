@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log("intentando loguear")
     this.authService.login(this.user.username, this.user.password);
   }
 
