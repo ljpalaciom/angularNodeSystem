@@ -1,0 +1,57 @@
+<div class="registration-form">
+    <h2 class="text-center">Inicio de sesión</h2>
+    <form [formGroup]="formRegistration" (ngSubmit)="createUser()">
+        <div class="avatar">
+            <img src="/assets/avatar.png" alt="Avatar">
+        </div>
+        <div class="form-group">
+            <input type="text"
+                [class.is-invalid]="(submitted || formRegistration.get('name').touched)  && formRegistration.get('name').invalid"
+                formControlName="name" class="form-control input-lg" name="name" placeholder="Nombre">
+
+            <div *ngIf="submitted && formRegistration.get('name').errors" class="invalid-feedback">
+                <div *ngIf="formRegistration.get('name').errors.required"> Es requerido</div>
+                <div *ngIf="formRegistration.get('name').errors.minlength"> Mínimo 2 caracteres</div>
+                <div *ngIf="formRegistration.get('name').errors.maxlength"> Máximo 20 caracteres</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="text"
+                [class.is-invalid]="(submitted || formRegistration.get('name').touched) && formRegistration.get('username').invalid"
+                formControlName="username" class="form-control input-lg" name="username" placeholder="Usuario">
+
+            <div *ngIf="submitted && formRegistration.get('username').errors" class="invalid-feedback">
+                <div *ngIf="formRegistration.get('username').errors.required"> Es requerido</div>
+                <div *ngIf="formRegistration.get('username').errors.minlength"> Mínimo 4 caracteres</div>
+                <div *ngIf="formRegistration.get('username').errors.maxlength"> Máximo 20 caracteres</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password"
+                [class.is-invalid]="(submitted || formRegistration.get('password').touched) && formRegistration.get('password').invalid"
+                formControlName="password" class="form-control input-lg" name="password" placeholder="Contraseña">
+            <div *ngIf="submitted && formRegistration.get('password').errors" class="invalid-feedback">
+                <div *ngIf="formRegistration.get('password').errors.required"> Es requerido</div>
+                <div *ngIf="formRegistration.get('password').errors.minlength"> Mínimo 5 caracteres</div>
+                <div *ngIf="formRegistration.get('password').errors.maxlength"> Máximo 20 caracteres</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="email"
+                [class.is-invalid]="(submitted || formRegistration.get('email').touched) && formRegistration.get('email').invalid"
+                formControlName="email" class="form-control input-lg" name="email" placeholder="Correo electrónico"
+                ngModel email>
+                <div *ngIf="submitted && formRegistration.get('email').errors" class="invalid-feedback">
+                    <div *ngIf="formRegistration.get('email').errors.required"> Es requerido</div>
+                    <div *ngIf="formRegistration.get('email').errors.email"> Correo inválido </div>
+                    
+                </div>
+        </div>
+        <div class="form-group">
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block registration-btn">Registrarse</button>
+        </div>
+    </form>
+
+</div>

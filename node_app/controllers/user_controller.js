@@ -32,23 +32,41 @@ exports.getUser = function (req, res) {
 }
 
 exports.setUser = function (req, res) {
-	var user = new User(
-		{
-			username: req.body.username,
-			password: req.body.password,
-			name: req.body.name,
-			age: req.body.age,
-			email: req.body.email
-		});
-	user.save(
-		function (err, user) {
-			if (err) {
-				return res.status(500).json({
+	
+	User.findOne({ username: req.body.username }).exec()
+		.then(function (user) {
+
+			if (user) {
+				return res.status(400).json({
 					status: 'error',
-					message: err.message,
+					message: "Ese usuario ya existe",
 				})
 			}
-			res.json(user);
+			user = new User(
+				{
+					username: req.body.username,
+					password: req.body.password,
+					name: req.body.name,
+					age: req.body.age,
+					email: req.body.email
+				});
+				
+			user.save(
+				function (err, user) {
+					if (err) {
+						if (err.name == "ValidationError") {
+							return res.status(400).json({
+								status: 'error',
+								message: err.message,
+							})
+						}
+						return res.status(500).json({
+							status: 'error',
+							message: 'error autenticando',
+						})
+					}
+					res.json(user);
+				});
 		});
 }
 
@@ -66,11 +84,12 @@ exports.login = function (req, res) {
 				return res.status(401).json({
 					status: 'error',
 					message: "Usuario desconocido",
-				})			
+				})
 			} else {
 				try {
 					isMatch = bcrypt.compareSync(req.body.password, user.password);
-				} catch (error) {					
+				} catch (error) {
+
 					return res.status(500).json({
 						status: 'error',
 						message: "Error autenticando",

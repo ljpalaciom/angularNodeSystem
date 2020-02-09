@@ -17,7 +17,6 @@ var UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "can't be blank"],
-        match: /(?=.*[a-zA-Z])(?=.*[0-9]+).*/,
         minlength: 5,
         maxlength: 20
     },
