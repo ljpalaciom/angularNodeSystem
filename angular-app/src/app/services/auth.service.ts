@@ -24,12 +24,10 @@ export class AuthService {
   login(username: string, password: string) {
     this.http.post(environment.url + '/login', { username: username, password: password })
       .subscribe((resp: any) => {
-
-        this.router.navigate(['data']);
-
         localStorage.setItem('auth_token', resp.token);
         localStorage.setItem('username', username);
         this.dataSharingService.changeNavBar.next(true);
+        this.router.navigate(['data']);
       }, error => {
         if (error.status == 401) {
           alert("Credenciales incorrectas");
@@ -41,7 +39,6 @@ export class AuthService {
   }
 
   logout() {
-    // const url_api = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('username');
     this.dataSharingService.changeNavBar.next(true);

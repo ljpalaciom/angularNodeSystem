@@ -23,15 +23,13 @@ export class DataVisualizationComponent implements OnInit {
   subscription: Subscription
 
   ngOnInit() {
-    this.username = this.authService.getUsername();
-    console.log(this.username);
     this.getData();
   }
 
   getData() {
+    this.username = this.authService.getUsername();
     this.dataService.getData().subscribe(
       res => {
-        console.log("holii");
         this.data = res;
         let temperatures = res.map(data => data.temperature);
         let humidities = res.map(data => data.humidity);

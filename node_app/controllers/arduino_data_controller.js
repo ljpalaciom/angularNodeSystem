@@ -1,7 +1,6 @@
 var ArduinoData = require('../models/arduino_data');
 
 exports.listArduinoData = function (req, res) {
-
 	ArduinoData.find({ user: req.decoded.sub }).populate("user", "username").exec(
 		function (err, listData) {
 			if (err) {	
