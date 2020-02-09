@@ -33,7 +33,7 @@ exports.getUser = function (req, res) {
 
 exports.setUser = function (req, res) {
 	
-	User.findOne({ username: req.body.username }).exec()
+	User.findOne({$or: [{email: req.body.email}, {username: req.body.username}]}).exec()
 		.then(function (user) {
 
 			if (user) {

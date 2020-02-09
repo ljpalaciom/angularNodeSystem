@@ -27,7 +27,12 @@ var UserSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 20
     },
-    email: { type: String, required: [true, "can't be blank"], validate: [validator.isEmail, 'Ingrese un correo valido'] },
+    email: {
+        type: String,
+        required: [true, "can't be blank"],
+        validate: [validator.isEmail, 'Ingrese un correo valido'],
+        unique: true
+    },
     admin: { type: Boolean, default: false }
 })
 
