@@ -1,8 +1,5 @@
 # Proyecto1 Telematica
 
-Luis Javier Palacio Mesa <br>
-Universidad EAFIT - 2020-I
-
 2. ¿CUALES SON LOS REQUISITOS FUNCIONALES DE LA APP?
 - El sistema permitirá a los usuarios autorizados visualizar los datos recogidos por sus dispositivos.
 - El sistema permitirá al usuario actualizar los datos que está visualizando de sus dispositivos.
@@ -85,3 +82,6 @@ En la parte del front-end se usó Angular.
 6. ¿CÓMO REALIZÓ LA AUTENTICACIÓN DE LOS SERVICIOS API REST?
 En la parte del cliente se usó JSON Web Token como mecanismo de autenticación. Se usó el local storage del navegador para guardar el token, y se elimina de este cuando ya no es necesario. El JSON Web Token es generado por el backend cuando un usuario inicia sesión con el fin de autenticarlo y permitirle acceder al servicio que muestra la información recolectada.  Para mayor seguridad el token debe tener un tiempo de vida de 5 minutos. <br>
 Por último, solo se permite agregar datos de los dispositivos que conozcan una clave secreta (api-key)  que coincida con la que tiene el servidor.
+
+Luis Javier Palacio Mesa <br>
+Universidad EAFIT - 2020-I
